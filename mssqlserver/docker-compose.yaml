@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "${MSSQL_PORT}:${MSSQL_PORT}"
+    volumes:
+        - '../mssqlserver/volumes:/var/opt/mssql'
+    networks:
+        - "mssql-compose-network"
+    
+networks: 
+  mssql-compose-network:
+    driver: bridge
