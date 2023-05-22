@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    restart: always
+    networks: 
+      - ${NETWORK}
+    environment:
+      ZOOKEEPER_CLIENT_PORT: ${ZOO_CLIENT_PORT}
+      ZOOKEEPER_TICK_TIME: ${ZOO_TICK_TIME}
+    volumes:
+      - ../kafka/volumes:/zookeeper    
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    networks: 
+      - ${NETWORK}
+    depends_on:
+      - zookeeper
+    ports:
+      - ${KAFKA_PORT}:${KAFKA_PORT}
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOO_CLIENT_PORT}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:${KAFKA_ADVERTISED_PORT},PLAINTEXT_HOST://localhost:${KAFKA_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ../kafka/volumes:/kafka
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    restart: always
+    networks: 
+      - ${NETWORK}
+    depends_on:
+      - kafka
+    ports:
+      - ${KAFDROP_PORT}:${KAFDROP_PORT}
+    environment:
+      KAFKA_BROKERCONNECT: kafka:${KAFKA_ADVERTISED_PORT}
+    volumes:
+      - ../kafka/volumes:/kafdrop
+
+networks: 
+  kafka-compose-network:
+    driver: bridge  
