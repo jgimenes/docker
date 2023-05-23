@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  postgresql:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 'P4ssw0rd'
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./volumes:/var/lib/postgresql/data 
+    networks:
+      - postgresql-network
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'jgimenes@gmail.com'
+      PGADMIN_DEFAULT_PASSWORD: 'P4ssw0rd'
+    ports:
+      - '8085:80'
+    depends_on:
+      - postgresql
+    networks:
+      - postgresql-network
+
+networks: 
+  postgresql-network:
+    driver: bridge

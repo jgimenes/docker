@@ -5,16 +5,16 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     restart: always
     environment:
-      SA_PASSWORD: ${SA_PASSWORD}
+      SA_PASSWORD: "P4ssw0rd"
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Developer"
     ports:
-      - "${MSSQL_PORT}:${MSSQL_PORT}"
+      - "1433:1433"
     volumes:
-        - '../mssqlserver/volumes:/var/opt/mssql'
+        - './volumes:/var/opt/mssql'
     networks:
-        - "mssql-compose-network"
+        - "mssql-network"
     
 networks: 
-  mssql-compose-network:
+  mssql-network:
     driver: bridge

@@ -2,3 +2,6 @@ mongodb/volumes/
 postgresql/volumes/
 mssqlserver/volumes/
 mysqlserver/volumes/
+kafka/volumes/
+rabbitmq/volumes/
+elastic/volumes/
