@@ -7,6 +7,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: "root"
       MONGO_INITDB_ROOT_PASSWORD: "P4ssw0rd"
+      MONGO_INITDB_USERNAME: "mdbuser"
+      MONGO_INITDB_PASSWORD: "P4ssw0rd" # Senha do novo usuário não root
     ports:
       - 27017:27017
     volumes:
@@ -14,6 +16,6 @@ services:
     networks:
       - mongo-network
 
-networks: 
-    mongo-network:
-      driver: bridge
+networks:
+  mongo-network:
+    driver: bridge
